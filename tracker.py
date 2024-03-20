@@ -5,6 +5,9 @@ import os
 from pymongo import MongoClient
 import random
 from dotenv import load_dotenv
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
 
@@ -44,10 +47,11 @@ def process_message(message):
         if not embed:
             return ""
 
-        message_title = embed['title']
-        message_desc = embed['description']
+        message_title = embed.get('title', "")
+        message_desc = embed.get("description", "")
         message_fields = embed['fields']
         print(f"Message title: {message_title}")
+        logging.info(f"Message title: {message_title}")
 
         fields_values = [list(field.values()) for field in message_fields]
         message_content = f"{message_title}{message_desc}{str(fields_values)}"
@@ -115,6 +119,7 @@ if __name__ == "__main__":
         # Increment check count and print status
             i += 1
             print(f"Checking Now, times checked: {i}")
+            logging.info(f"Checking Now, times checked: {i}")
 
             # Fetch messages from Discord
             mint_token_response = get_response(SONIC_ID)
